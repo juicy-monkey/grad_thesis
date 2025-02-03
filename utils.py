@@ -2,10 +2,8 @@ from matplotlib import pyplot as plt
 import torch
 import torchvision.transforms.functional as F
 
-from metrics import dice, hd95
 
-
-def show_result(input, mask, y_prob, include_dice=False, include_hd95=False):
+def show_result(input, mask, y_prob):
     plt.figure(figsize=(15, 5))
 
     plt.subplot(141)
@@ -25,14 +23,9 @@ def show_result(input, mask, y_prob, include_dice=False, include_hd95=False):
     # plt.colorbar(y_prob, ax=plt.gca(), fraction=0.046, pad=0.04)
 
     plt.subplot(144)
-    # y = torch.round(y_prob)
-    y = (y_prob > 0.2).float()
+    y = torch.round(y_prob)
     plt.imshow(F.to_pil_image(y), cmap='gray')
     title = 'Output'
-    if include_dice:
-        title += f'\nDice = {dice(y, mask):.3f}'
-    if include_hd95:
-        title += f'\nHD95 = {hd95(y, mask):.3f}'
     plt.title(title)
     plt.axis('off')
     plt.axis('off')
